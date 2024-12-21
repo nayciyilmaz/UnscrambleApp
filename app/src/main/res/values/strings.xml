@@ -2,8 +2,9 @@
     <string name="app_name">UnscrambleApplication</string>
 
     <string name="unscramble">UNSCRAMBLE</string>
-    <string name="submit">Submit</string>
-    <string name="skip">Skip</string>
+    <string name="submit">Submit Word</string>
+    <string name="reshuffle">Reshuffle Word</string>
+    <string name="skip">Skip Word</string>
     <string name="score">Score: %d</string>
     <string name="word_count">%d/%d</string>
     <string name="label">Enter your word</string>

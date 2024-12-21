@@ -51,12 +51,15 @@ fun GameLayout(
                 text = stringResource(R.string.word_count, currentWordCount, maxWordCount),
                 modifier = modifier
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFF2196F3))
+                    .background(MaterialTheme.colorScheme.primary)
                     .align(Alignment.End)
                     .padding(top = 6.dp)
                     .width(64.dp)
                     .height(32.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             )
         }
 

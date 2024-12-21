@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.unscrambleapplication.R
+import com.example.unscrambleapplication.components.GameButtons
 import com.example.unscrambleapplication.components.GameLayout
 import com.example.unscrambleapplication.viewmodel.GameViewModel
 
@@ -49,6 +50,13 @@ fun GameScreen(
             ),
             currentWordCount = uiState.currentWordCount,
             isError = uiState.isError
+        )
+        GameButtons(
+            skipWords = { gameViewModel.selectRandomWord() },
+            enabled = gameViewModel.wordCount(),
+            submit = { gameViewModel.checkUserGuess() },
+            resetGuess = { gameViewModel.resetGuess() },
+            reshuffle = { gameViewModel.reshuffleCurrentWord() }
         )
     }
 }

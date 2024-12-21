@@ -2,6 +2,7 @@ package com.example.unscrambleapplication.data
 
 const val maxWordCount = 10
 const val correctGuessPoints = 20
+const val incorrectGuessPenalty = 3
 
 val allWords: Set<String> =
     setOf(
@@ -171,11 +172,9 @@ val allWords: Set<String> =
         "winter",
         "well",
         "whirlwind",
-        "x-ray",
         "xylophone",
         "yoga",
         "yogurt",
-        "yoyo",
         "you",
         "year",
         "yummy",
