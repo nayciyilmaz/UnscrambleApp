@@ -5,8 +5,9 @@
     <string name="submit">Submit Word</string>
     <string name="reshuffle">Reshuffle Word</string>
     <string name="skip">Skip Word</string>
+    <string name="game_over">Game Over</string>
     <string name="score">Score: %d</string>
-    <string name="word_count">%d/%d</string>
+    <string name="word_count">Word: %d/%d</string>
     <string name="label">Enter your word</string>
     <string name="congratulations">Congratulations</string>
     <string name="you_scored">You Scored : %d</string>

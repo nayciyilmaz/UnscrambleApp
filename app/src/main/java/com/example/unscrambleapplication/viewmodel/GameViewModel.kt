@@ -18,14 +18,19 @@ class GameViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(GameUiState())
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
 
+    private var usedWords = mutableSetOf<String>()
+
+    var isTimerRunning by mutableStateOf(true)
+    var secondsElapsed by mutableStateOf(0)
+
+    var showDialog by mutableStateOf(false)
+        private set
     var userGuess by mutableStateOf("")
         private set
 
     fun updateUserGuess(newUserGuess: String) {
         userGuess = newUserGuess
     }
-
-    private var usedWords = mutableSetOf<String>()
 
     init {
         selectRandomWord()
@@ -37,7 +42,7 @@ class GameViewModel : ViewModel() {
         updateScrambledWord(word)
     }
 
-     private fun updateScrambledWord(word: String) {
+    private fun updateScrambledWord(word: String) {
         val shuffledWord = generateShuffledWord(word)
 
         _uiState.update { currentState ->
@@ -50,7 +55,7 @@ class GameViewModel : ViewModel() {
         }
     }
 
-     private fun generateShuffledWord(word: String): String {
+    private fun generateShuffledWord(word: String): String {
         return word.toList() // kelimeyi harflere ayırma
             .shuffled() // ayırılanları karıştırma
             .joinToString("") // karıştırılanı birleştirme
@@ -70,16 +75,18 @@ class GameViewModel : ViewModel() {
     }
 
     fun checkUserGuess() {
+        if (userGuess.isBlank()) {
+            return
+        }
+
         _uiState.update { currentState ->
             if (_uiState.value.originalWord.equals(userGuess, ignoreCase = true)) {
-                // kullanıcı doğru giriş yaptı
                 currentState.copy(
                     totalScore = _uiState.value.totalScore.plus(correctGuessPoints),
                     isGuessCorrect = true,
                     isError = false
                 )
-            }else {
-                // kullanıcı yanlış giriş yaptı
+            } else {
                 currentState.copy(
                     totalScore = _uiState.value.totalScore.minus(incorrectGuessPenalty),
                     isGuessCorrect = false,
@@ -87,21 +94,47 @@ class GameViewModel : ViewModel() {
                 )
             }
         }
-        if (_uiState.value.isGuessCorrect) { // kullanıcı doğru giriş yaptı
-            if (_uiState.value.currentWordCount == maxWordCount) {
-                // sonra yazılacak (oyun bitimi)
-            } else {
-                selectRandomWord()
-            }
-        }
+        gameOver(forceGameOver = _uiState.value.currentWordCount == maxWordCount)
         resetGuess()
     }
 
-    fun wordCount(): Boolean {
-        return _uiState.value.currentWordCount < maxWordCount
+    fun gameOver(forceGameOver: Boolean = false) {
+        if (forceGameOver || _uiState.value.currentWordCount >= maxWordCount) {
+            isTimerRunning = false
+            showDialog = true
+        } else {
+            selectRandomWord()
+        }
     }
 
     fun resetGuess() {
         userGuess = ""
+    }
+
+    fun updateTimer() {
+        if (isTimerRunning) {
+            secondsElapsed += 1
+            _uiState.update { currentState ->
+                currentState.copy(secondsElapsed = secondsElapsed)
+            }
+        }
+    }
+
+    fun resetGame() {
+        usedWords.clear()
+        showDialog = false
+        secondsElapsed = 0
+        isTimerRunning = true
+        _uiState.update { currentState ->
+            currentState.copy(
+                currentWordCount = 0,
+                totalScore = 0,
+                isError = false,
+                originalWord = "",
+                isGuessCorrect = false,
+                secondsElapsed = secondsElapsed
+            )
+        }
+        selectRandomWord()
     }
 }

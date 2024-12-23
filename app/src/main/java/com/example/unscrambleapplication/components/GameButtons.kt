@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unscrambleapplication.R
+import com.example.unscrambleapplication.data.maxWordCount
 
 @Composable
 fun GameButtons(
@@ -20,8 +21,9 @@ fun GameButtons(
     skipWords: () -> Unit,
     resetGuess: () -> Unit,
     submit: () -> Unit,
-    enabled: Boolean,
-    reshuffle: () -> Unit
+    reshuffle: () -> Unit,
+    currentWordCount: Int,
+    gameOver: (Boolean) -> Unit
 ) {
     Column(modifier.padding(12.dp)) {
         Button(
@@ -48,18 +50,25 @@ fun GameButtons(
         }
         Button(
             onClick = {
-                skipWords()
-                resetGuess()
+                if (currentWordCount == maxWordCount) {
+                    gameOver(true)
+                } else {
+                    skipWords()
+                    resetGuess()
+                }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 contentColor = MaterialTheme.colorScheme.onTertiary
             )
         ) {
-            Text(text = stringResource(R.string.skip))
+            if (currentWordCount == maxWordCount) {
+                Text(text = stringResource(R.string.game_over))
+            } else {
+                Text(text = stringResource(R.string.skip))
+            }
         }
     }
 }

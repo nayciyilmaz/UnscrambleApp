@@ -6,5 +6,6 @@ data class GameUiState(
     val totalScore: Int = 0,
     val isGuessCorrect: Boolean = false,
     val originalWord: String = "",
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val secondsElapsed: Int = 0
 )
